@@ -12,6 +12,14 @@
         <div class="half">
             <h1> LINKETINDER</h1>
         </div>
+        <div class="view">
+            <div class="buttonView">
+                visão do candidato
+            </div>
+            <div class="buttonView">
+                visão da empresa
+            </div>
+        </div>
        <div class="half actions">
             <div class="buttonAction"> 
                 <div>
@@ -31,10 +39,10 @@
                     Cadastro 
                 </div>
                 <div class="selectUser hide" id="signUp">
-                    <div onclick="showFormCandidade()">
-                        cadidatos
+                    <div class="options" onclick="showFormCandidade()">
+                        candidatos
                     </div>
-                    <div onclick="showFormCompanies()">
+                    <div class="options" onclick="showFormCompanies()">
                         empresas
                     </div>
                 </div> 
@@ -85,6 +93,12 @@
             <br />
 
             <button> Cadastrar Candidato </button>
+            <br />
+
+            <div class="cancelButton" onclick="reload()">
+                cancelar
+            </div>
+            <br/>
         </form>
     </div>    
     <div class="formSignUpCompanies boxForm hide" id="formSignUpCompanies">
@@ -126,6 +140,11 @@
             <br />
 
             <button> Cadastrar Empresa </button>
+
+            <div class="cancelButton" onclick="reload()">
+                cancelar
+            </div>
+            <br/>
         </form>
     </div>
     <script src="../index.js"></script>

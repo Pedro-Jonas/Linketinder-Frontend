@@ -23,3 +23,7 @@ function showFormCompanies() : void {
    }
    formCompanies?.classList.remove("hide")
 }
+
+function reload() : void {
+   window.location.reload()
+}

@@ -14,6 +14,9 @@ h1 {
 }
 
 .header {
+    position: sticky;
+    top:0;
+    z-index: 1;
     display: flex;
     background-color: rgb(20, 103, 154);
     width: 100%;
@@ -29,10 +32,26 @@ h1 {
     width: 50%;
 }
 
+.view {
+    display: flex;
+    gap: 20px;
+}
+
 .actions {
     justify-content: flex-end;
     padding-right: 60px;
     gap: 30px;
+}
+
+.buttonView {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    height: 40px;
+    border-radius: 8px;
+    font-weight: bold;
+    background-color: rgb(40, 47, 137);
 }
 
 .buttonAction {
@@ -71,6 +90,7 @@ h1 {
     gap: 20px;
     width: 100%;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .hide {
@@ -103,6 +123,23 @@ button {
     border: none;
     border-radius: 5px;
     width: 300px;
-    height: 45px;    
+    height: 45px;   
+    margin-bottom: 10px; 
+}
+
+.cancelButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: beige;
+    background-color:  rgb(209, 25, 15);
+    border-radius: 5px;
+    width: 300px;
+    height: 35px;     
+}
+
+.options:hover {
+    color: rgb(30, 96, 177);
 }
 

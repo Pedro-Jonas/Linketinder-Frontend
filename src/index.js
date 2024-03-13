@@ -19,3 +19,6 @@ function showFormCompanies() {
     }
     formCompanies === null || formCompanies === void 0 ? void 0 : formCompanies.classList.remove("hide");
 }
+function reload() {
+    window.location.reload();
+}
