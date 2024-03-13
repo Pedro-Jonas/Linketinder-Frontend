@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link  rel="stylesheet" href="./styles/reset.css">
+    <link  rel="stylesheet" href="./styles/style.css">
+    <title>LinkeTinder</title>
+</head>
+<body>
+    <div class="header">
+        <div class="half">
+            <h1> LINKETINDER</h1>
+        </div>
+       <div class="half actions">
+            <div class="buttonAction"> 
+                <div>
+                    Login
+                </div>
+                <div class="selectUser hide" id="signIn">
+                    <div>
+                        cadidatos
+                    </div>
+                    <div>
+                        empresas
+                    </div>
+                </div> 
+            </div>
+            <div class="buttonAction" onclick="showOptionsSignUp()" id="buttonSignUp"> 
+                <div>
+                    Cadastro 
+                </div>
+                <div class="selectUser hide" id="signUp">
+                    <div onclick="showFormCandidade()">
+                        cadidatos
+                    </div>
+                    <div onclick="showFormCompanies()">
+                        empresas
+                    </div>
+                </div> 
+            </div>
+       </div>
+    </div> 
+    <div class="formSignUpCandidate boxForm hide" id="formSignUpCandidate">
+        <h1>Cadastro de Candidato</h1>
+        <form>
+            <div>
+                <input type="text" name="name" value="" placeholder="Nome" required />
+            </div>
+            <br />
+        
+            <div>
+                <input type="email" name="email" value="" placeholder="Email" required />
+            </div>
+            <br />
+        
+            <div>
+                <input type="text" name="cpf" value="" placeholder="CPF" required />
+            </div>
+            <br />
+        
+            <div>
+                <input type="text" name="age" value="" placeholder="idade" required />
+            </div>
+            <br />
+        
+            <div>
+                <input type="text" name="state" value="" placeholder="Estado" required />
+            </div>
+            <br />
+        
+            <div>
+                <input type="text" name="cep" value="" placeholder="CEP" required />
+            </div>
+            <br />
+        
+            <div>
+                <textarea class="largerBox" name="description" placeholder="Descrição Pessoal" rows="10" cols="50"></textarea>
+            </div>
+            <br />
+
+            <div>
+                <textarea class="largerBox" name="Skills" placeholder="Competências (separadas por vírgula)" rows="10" cols="50"></textarea>
+            </div>
+            <br />
+
+            <button> Cadastrar Candidato </button>
+        </form>
+    </div>    
+    <div class="formSignUpCompanies boxForm hide" id="formSignUpCompanies">
+        <h1>Cadastro de Empresa</h1>
+        <form>
+            <div>
+                <input type="text" name="name" value="" placeholder="Nome" required  />
+            </div>
+            <br/>
+    
+            <div>
+                <input type="email" name="email" value="" placeholder="Email" required  />
+            </div>
+            <br/>  
+                    
+            <div>
+                <input type="text" name="cnpj" value="" placeholder="CNPJ" required  />
+                </div>
+            <br/>
+                    
+            <div>
+                <input type="text" name="country" value="" placeholder="País" required  />
+            </div>
+            <br/>  
+
+            <div>
+                <input type="text" name="state" value="" placeholder="Estado" required  />
+            </div>
+            <br/>  
+
+            <div>
+                <input type="text" name="cep" value="" placeholder="CEP" required  />
+            </div>
+            <br/> 
+        
+            <div>
+                <textarea class="largerBox" name="description" placeholder="Descrição da Empresa" rows="10" cols="50"></textarea>
+            </div>
+            <br />
+
+            <button> Cadastrar Empresa </button>
+        </form>
+    </div>
+    <script src="../index.js"></script>
+</body>
+</html>
