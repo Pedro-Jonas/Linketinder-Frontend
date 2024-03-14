@@ -1,4 +1,5 @@
 "use strict";
+const candidates = JSON.parse(localStorage.getItem("candidates") || '[]');
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
 const formCandidade = document.getElementById("formSignUpCandidate");
@@ -21,4 +22,26 @@ function showFormCompanies() {
 }
 function reload() {
     window.location.reload();
+}
+function createNewCandidade() {
+    const newCanditade = {
+        name: document.getElementById("candidateName").value,
+        email: document.getElementById("candidateEmail").value,
+        cpf: document.getElementById("candidateCpf").value,
+        age: document.getElementById("candidateAge").value,
+        state: document.getElementById("candidateState").value,
+        cep: document.getElementById("candidateCep").value,
+        descripition: document.getElementById("candidateDescripition").value,
+        skills: document.getElementById("candidateSkills").value,
+    };
+    candidates.push(newCanditade);
+    localStorage.setItem("candidates", JSON.stringify([candidates]));
+}
+function createNewCompanie() {
+}
+function showToCandidate() {
+    reload();
+}
+function showToCompanie() {
+    reload();
 }

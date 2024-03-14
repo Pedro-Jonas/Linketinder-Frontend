@@ -13,10 +13,10 @@
             <h1> LINKETINDER</h1>
         </div>
         <div class="view">
-            <div class="buttonView">
+            <div class="buttonView" onclick="showToCandidate()">
                 visão do candidato
             </div>
-            <div class="buttonView">
+            <div class="buttonView" onclick="showToCompanie()">
                 visão da empresa
             </div>
         </div>
@@ -51,48 +51,48 @@
     </div> 
     <div class="formSignUpCandidate boxForm hide" id="formSignUpCandidate">
         <h1>Cadastro de Candidato</h1>
-        <form>
+        <form onsubmit="createNewCandidade()">
             <div>
-                <input type="text" name="name" value="" placeholder="Nome" required />
+                <input type="text" name="name" id="candidateName" value="" placeholder="Nome" required />
             </div>
             <br />
         
             <div>
-                <input type="email" name="email" value="" placeholder="Email" required />
+                <input type="email" name="email" id="candidateEmail" value="" placeholder="Email" required />
             </div>
             <br />
         
             <div>
-                <input type="text" name="cpf" value="" placeholder="CPF" required />
+                <input type="text" name="cpf" id="candidateCpf" value="" placeholder="CPF" required />
             </div>
             <br />
         
             <div>
-                <input type="text" name="age" value="" placeholder="idade" required />
+                <input type="text" name="age" id="candidateAge" value="" placeholder="idade" required />
             </div>
             <br />
         
             <div>
-                <input type="text" name="state" value="" placeholder="Estado" required />
+                <input type="text" name="state" id="candidateState" value="" placeholder="Estado" required />
             </div>
             <br />
         
             <div>
-                <input type="text" name="cep" value="" placeholder="CEP" required />
+                <input type="text" name="cep" id="candidateCep" value="" placeholder="CEP" required />
             </div>
             <br />
         
             <div>
-                <textarea class="largerBox" name="description" placeholder="Descrição Pessoal" rows="10" cols="50"></textarea>
+                <textarea class="largerBox" name="description" id="candidateDescripition" placeholder="Descrição Pessoal" rows="10" cols="50"></textarea>
             </div>
             <br />
 
             <div>
-                <textarea class="largerBox" name="Skills" placeholder="Competências (separadas por vírgula)" rows="10" cols="50"></textarea>
+                <textarea class="largerBox" name="skills" id="candidateSkills" placeholder="Competências (separadas por vírgula)" rows="10" cols="50"></textarea>
             </div>
             <br />
 
-            <button> Cadastrar Candidato </button>
+            <button > Cadastrar Candidato </button>
             <br />
 
             <div class="cancelButton" onclick="reload()">
