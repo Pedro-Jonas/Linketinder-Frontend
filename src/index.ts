@@ -9,8 +9,18 @@ type candidate = {
    skills: string;
 }
 
-const candidates : candidate[] = JSON.parse(localStorage.getItem("candidates")|| '[]');
+type companie = {
+   name: string;
+   email: string;
+   cnpj:string;
+   country: string;
+   state: string;
+   cep: string;
+   descripition: string;
+}
 
+const candidates : candidate[] = JSON.parse(localStorage.getItem("candidates") || '[]');
+const companies : companie[] = JSON.parse(localStorage.getItem("companies") || '[]');
 
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
@@ -43,7 +53,7 @@ function reload() : void {
 }
 
 function createNewCandidade() : void {
-   const newCanditade = {
+   const newCanditade : candidate = {
       name: (document.getElementById("candidateName") as HTMLFormElement).value,
       email: (document.getElementById("candidateEmail") as HTMLFormElement).value,
       cpf: (document.getElementById("candidateCpf") as HTMLFormElement).value,
@@ -58,7 +68,17 @@ function createNewCandidade() : void {
 }
 
 function createNewCompanie() : void {
-
+   const newCompanie : companie = {
+      name: (document.getElementById("companieName") as HTMLFormElement).value,
+      email: (document.getElementById("companieEmail") as HTMLFormElement).value,
+      cnpj: (document.getElementById("companieCnpj") as HTMLFormElement).value,
+      country: (document.getElementById("companieCountry") as HTMLFormElement).value,
+      state: (document.getElementById("companieState") as HTMLFormElement).value,
+      cep: (document.getElementById("companieCep")as HTMLFormElement).value,
+      descripition: (document.getElementById("companieDescripition") as HTMLFormElement).value,
+   }
+   companies.push(newCompanie)
+   localStorage.setItem("companies", JSON.stringify([companies]))
 }
 
 function showToCandidate() : void {

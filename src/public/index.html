@@ -103,39 +103,39 @@
     </div>    
     <div class="formSignUpCompanies boxForm hide" id="formSignUpCompanies">
         <h1>Cadastro de Empresa</h1>
-        <form>
+        <form onsubmit="createNewCompanie()">
             <div>
-                <input type="text" name="name" value="" placeholder="Nome" required  />
+                <input type="text" name="name" value="" id="companieName"  placeholder="Nome" required  />
             </div>
             <br/>
     
             <div>
-                <input type="email" name="email" value="" placeholder="Email" required  />
+                <input type="email" name="email" value="" id="companieEmail"  placeholder="Email" required  />
             </div>
             <br/>  
                     
             <div>
-                <input type="text" name="cnpj" value="" placeholder="CNPJ" required  />
+                <input type="text" name="cnpj" id="companieCnpj" value="" placeholder="CNPJ" required  />
                 </div>
             <br/>
                     
             <div>
-                <input type="text" name="country" value="" placeholder="País" required  />
+                <input type="text" name="country" id="companieCountry" value="" placeholder="País" required  />
             </div>
             <br/>  
 
             <div>
-                <input type="text" name="state" value="" placeholder="Estado" required  />
+                <input type="text" name="state"  id="companieState" value="" placeholder="Estado" required  />
             </div>
             <br/>  
 
             <div>
-                <input type="text" name="cep" value="" placeholder="CEP" required  />
+                <input type="text" name="cep" id="companieCep"  value="" placeholder="CEP" required  />
             </div>
             <br/> 
         
             <div>
-                <textarea class="largerBox" name="description" placeholder="Descrição da Empresa" rows="10" cols="50"></textarea>
+                <textarea class="largerBox" name="description" id="companieDescripition" placeholder="Descrição da Empresa" rows="10" cols="50"></textarea>
             </div>
             <br />
 

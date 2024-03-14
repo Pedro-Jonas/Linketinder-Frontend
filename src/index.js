@@ -1,5 +1,6 @@
 "use strict";
 const candidates = JSON.parse(localStorage.getItem("candidates") || '[]');
+const companies = JSON.parse(localStorage.getItem("companies") || '[]');
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
 const formCandidade = document.getElementById("formSignUpCandidate");
@@ -38,6 +39,17 @@ function createNewCandidade() {
     localStorage.setItem("candidates", JSON.stringify([candidates]));
 }
 function createNewCompanie() {
+    const newCompanie = {
+        name: document.getElementById("companieName").value,
+        email: document.getElementById("companieEmail").value,
+        cnpj: document.getElementById("companieCnpj").value,
+        country: document.getElementById("companieCountry").value,
+        state: document.getElementById("companieState").value,
+        cep: document.getElementById("companieCep").value,
+        descripition: document.getElementById("companieDescripition").value,
+    };
+    companies.push(newCompanie);
+    localStorage.setItem("companies", JSON.stringify([companies]));
 }
 function showToCandidate() {
     reload();
