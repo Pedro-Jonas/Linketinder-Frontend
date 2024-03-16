@@ -50,7 +50,9 @@
        </div>
     </div> 
     <div class="formSignUpCandidate boxForm hide" id="formSignUpCandidate">
-        <h1>Cadastro de Candidato</h1>
+        <div class="titleView">
+            <h2>Cadastro de Candidato</h2>
+        </div>
         <form onsubmit="createNewCandidade()">
             <div>
                 <input type="text" name="name" id="candidateName" value="" placeholder="Nome" required />
@@ -92,6 +94,12 @@
             </div>
             <br />
 
+            <div>
+                <textarea class="largerBox" name="academicEducation" id="academicEducation" placeholder="Formações (separadas por vírgula)" rows="10" cols="50"></textarea>
+            </div>
+            <br />
+
+
             <button > Cadastrar Candidato </button>
             <br />
 
@@ -102,7 +110,9 @@
         </form>
     </div>    
     <div class="formSignUpCompanies boxForm hide" id="formSignUpCompanies">
-        <h1>Cadastro de Empresa</h1>
+        <div class="titleView">
+            <h2>Cadastro de Empresa</h2>
+        </div>
         <form onsubmit="createNewCompanie()">
             <div>
                 <input type="text" name="name" value="" id="companieName"  placeholder="Nome" required  />
@@ -156,7 +166,14 @@
         <div class="titleView">
             <h2>Candidatos</h2>
         </div>
+        <div>
+            
+        </div>
     </div>
+    <div class="graphic hide" id="graphic" >
+        <canvas id="myChart" width="100vw" ></canvas>
+    </div>    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../index.js"></script>
 </body>
 </html>
