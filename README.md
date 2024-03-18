@@ -21,3 +21,5 @@ tsc -w
 
 ## Link para o backEnd
 https://github.com/Pedro-Jonas/Linketinder
+
+Pedro Jonas Nunes de Araújo
