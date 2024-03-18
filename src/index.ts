@@ -29,7 +29,7 @@ type companie = {
 
 const candidates: candidate[] = JSON.parse(localStorage.getItem("candidates") || '[]');
 const companies: companie[] = JSON.parse(localStorage.getItem("companies") || '[]');
-let allSkills = new Map<string, number>();
+const allSkills = JSON.parse(localStorage.getItem("allSkills") || '[]');  
 
 const divGraphic = document.getElementById("graphic") as HTMLBodyElement;
 const scriptGrafic = document.createElement("script");
@@ -37,12 +37,14 @@ const scriptGrafic = document.createElement("script");
 const divToCandidate = document.querySelector(".showToCandidate") as HTMLBodyElement;
 const divToCompanie = document.querySelector(".showToCompanie") as HTMLBodyElement;
 
-
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
 
-const formCandidade = (document.getElementById("formSignUpCandidate") as HTMLBodyElement);
-const formCompanies = (document.getElementById("formSignUpCompanies") as HTMLBodyElement);
+const divFormCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLBodyElement);
+const divFormCompanie = (document.getElementById("divFormSignUpCompanies") as HTMLBodyElement);
+
+const formCreatCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLBodyElement);
+const formCreatCompanie = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
 
 let htmlToCandidate: string = ``;
 let htmlToCompanie: string = ``;
@@ -64,37 +66,40 @@ for (let companie of companies) {
    `
 }
 
-for (let candidate of candidates) {
-   for(let skill of candidate.skills){
-      if (allSkills.has(skill)){
-         let count = allSkills.get(skill);
+for (const candidate of candidates) {
+
+   for(const skill of candidate.skills){
+      const skillTrim = skill.trim().toUpperCase();
+      if (allSkills.hasOwnProperty(skillTrim)){
+         let count = allSkills[skillTrim];
          count? count++ : 0;
-         allSkills.set(skill, count? count: 0)
+         allSkills[skillTrim] = count? count: 0;
       } else {
-         allSkills.set(skill,1)
+         allSkills[skillTrim] = 1;
       }
-   
    }
+
    htmlToCompanie += `
    <div class="boxCompanieAndCandidate">
       <p>candidato ${candidates.indexOf(candidate) + 1}</p>
-      <p>skills: ${candidate.skills}</p>
-      <p>formação: ${candidate.academicEducation}</p>
       <p>descrição: ${candidate.descripition}</p>
+      <p>formação: ${candidate.academicEducation}</p>
+      <p>skills: ${candidate.skills}</p>
    </div>
    `
 }
 
-console.log(allSkills)
+localStorage.setItem("allSkills", JSON.stringify(allSkills));
 
 function showOptionsSignUp(): void {
    buttonSignUp?.classList.toggle("buttonActionClicked")
    signUp?.classList.toggle("hide")
 }
 
-function showFormCandidade(): void {
-   if (!formCompanies.classList.contains("hide")) {
-      formCompanies.classList.add("hide")
+function showFormCandidate(): void {
+
+   if (!divFormCompanie.classList.contains("hide")) {
+      divFormCompanie.classList.add("hide")
    }
 
    if (!divToCandidate.classList.contains("hide")) {
@@ -106,13 +111,14 @@ function showFormCandidade(): void {
       divGraphic.classList.add("hide")
    }
 
-   formCandidade.classList.remove("hide")
+   divFormCandidate.classList.remove("hide")
    
 }
 
-function showFormCompanies(): void {
-   if (!formCandidade?.classList.contains("hide")) {
-      formCandidade?.classList.add("hide")
+function showFormCompanie(): void {
+
+   if (!divFormCandidate.classList.contains("hide")) {
+      divFormCandidate.classList.add("hide")
    }
 
    if (!divToCandidate.classList.contains("hide")) {
@@ -123,12 +129,33 @@ function showFormCompanies(): void {
       divToCompanie.classList.add("hide")
       divGraphic.classList.add("hide")
    }
-   formCompanies?.classList.remove("hide")
+   divFormCompanie.classList.remove("hide")
 }
 
 function reload(): void {
    window.location.reload()
 }
+
+formCreatCandidate.addEventListener("submit", (event) => {
+   event.preventDefault();
+
+   const newCanditade: candidate = {
+      name: (document.getElementById("candidateName") as HTMLFormElement).value,
+      email: (document.getElementById("candidateEmail") as HTMLFormElement).value,
+      cpf: (document.getElementById("candidateCpf") as HTMLFormElement).value,
+      age: (document.getElementById("candidateAge") as HTMLFormElement).value,
+      state: (document.getElementById("candidateState") as HTMLFormElement).value,
+      cep: (document.getElementById("candidateCep") as HTMLFormElement).value,
+      descripition: (document.getElementById("candidateDescripition") as HTMLFormElement).value,
+      skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
+      academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
+   }
+
+   candidates.push(newCanditade);
+   localStorage.setItem("candidates", JSON.stringify(candidates));
+
+   reload();
+})
 
 function createNewCandidade(): void {
 
@@ -144,8 +171,8 @@ function createNewCandidade(): void {
       academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
    }
 
-   candidates.push(newCanditade)
-   localStorage.setItem("candidates", JSON.stringify(candidates))
+   candidates.push(newCanditade);
+   localStorage.setItem("candidates", JSON.stringify(candidates));
 }
 
 function createNewCompanie(): void {
@@ -176,12 +203,12 @@ function showToCandidate(): void {
       divToCompanie.classList.add("hide")
    }
 
-   if (!formCompanies.classList.contains("hide")) {
-      formCompanies.classList.add("hide")
+   if (!divFormCompanie.classList.contains("hide")) {
+      divFormCompanie.classList.add("hide")
    }
 
-   if (!formCandidade?.classList.contains("hide")) {
-      formCandidade.classList.add("hide")
+   if (!divFormCandidate.classList.contains("hide")) {
+      divFormCandidate.classList.add("hide")
    }
 
    if (!clickedShowToCandidate) {
@@ -193,6 +220,7 @@ function showToCandidate(): void {
 }
 
 function showJobs(id: string) : void {
+
    const searchCompanie = (document.getElementById(id) as HTMLBodyElement);
    const idNumber = parseInt(id);
    const vacancies = companies[idNumber].jobVacancies;
@@ -213,6 +241,7 @@ function showJobs(id: string) : void {
          `
       } 
    }
+
    searchCompanie.innerHTML = `
    <div class="vacancies">
       ${companies[idNumber].jobVacancies ?
@@ -225,16 +254,17 @@ function showJobs(id: string) : void {
 
 let clickedShowToCompanie = false;
 function showToCompanie(): void {
+
    if (!divToCandidate.classList.contains("hide")) {
       divToCandidate.classList.add("hide")
    }
 
-   if (!formCompanies.classList.contains("hide")) {
-      formCompanies.classList.add("hide")
+   if (!divFormCompanie.classList.contains("hide")) {
+      divFormCompanie.classList.add("hide")
    }
 
-   if (!formCandidade?.classList.contains("hide")) {
-      formCandidade.classList.add("hide")
+   if (!divFormCandidate.classList.contains("hide")) {
+      divFormCandidate.classList.add("hide")
    }
 
    if (!clickedShowToCompanie) {
@@ -249,13 +279,15 @@ function showToCompanie(): void {
 }
 
 function createGraphic(): void {
+
    const skills: string[] = [];
    const candidatesForSkills: number[] = [];
-   allSkills.forEach((key, value) => {
-      console.log(value, key)
-      candidatesForSkills.push(key)
-      skills.push(value)
-   })
+
+   for(const skill in allSkills) {
+      skills.push(skill);
+      candidatesForSkills.push(allSkills[skill]);
+   }
+
    const graphicObjet = {
       type: 'bar',
       data: {
@@ -274,9 +306,12 @@ function createGraphic(): void {
         }
       }
    };
+
    const graphicObjetJson = JSON.stringify(graphicObjet);
    scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');
-   new Chart(ctx, ${graphicObjetJson});`
+   new Chart(ctx, ${graphicObjetJson});
+   `
+
    document.body.appendChild(scriptGrafic);
 }

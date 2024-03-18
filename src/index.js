@@ -1,15 +1,17 @@
 "use strict";
 const candidates = JSON.parse(localStorage.getItem("candidates") || '[]');
 const companies = JSON.parse(localStorage.getItem("companies") || '[]');
-let allSkills = new Map();
+const allSkills = JSON.parse(localStorage.getItem("allSkills") || '[]');
 const divGraphic = document.getElementById("graphic");
 const scriptGrafic = document.createElement("script");
 const divToCandidate = document.querySelector(".showToCandidate");
 const divToCompanie = document.querySelector(".showToCompanie");
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
-const formCandidade = document.getElementById("formSignUpCandidate");
-const formCompanies = document.getElementById("formSignUpCompanies");
+const divFormCandidate = document.getElementById("divFormSignUpCandidate");
+const divFormCompanie = document.getElementById("divFormSignUpCompanies");
+const formCreatCandidate = document.getElementById("divFormSignUpCandidate");
+const formCreatCompanie = document.getElementById("divFormSignUpCompanie");
 let htmlToCandidate = ``;
 let htmlToCompanie = ``;
 for (let companie of companies) {
@@ -27,34 +29,35 @@ for (let companie of companies) {
    </div>
    `;
 }
-for (let candidate of candidates) {
-    for (let skill of candidate.skills) {
-        if (allSkills.has(skill)) {
-            let count = allSkills.get(skill);
+for (const candidate of candidates) {
+    for (const skill of candidate.skills) {
+        const skillTrim = skill.trim().toUpperCase();
+        if (allSkills.hasOwnProperty(skillTrim)) {
+            let count = allSkills[skillTrim];
             count ? count++ : 0;
-            allSkills.set(skill, count ? count : 0);
+            allSkills[skillTrim] = count ? count : 0;
         }
         else {
-            allSkills.set(skill, 1);
+            allSkills[skillTrim] = 1;
         }
     }
     htmlToCompanie += `
    <div class="boxCompanieAndCandidate">
       <p>candidato ${candidates.indexOf(candidate) + 1}</p>
-      <p>skills: ${candidate.skills}</p>
-      <p>formação: ${candidate.academicEducation}</p>
       <p>descrição: ${candidate.descripition}</p>
+      <p>formação: ${candidate.academicEducation}</p>
+      <p>skills: ${candidate.skills}</p>
    </div>
    `;
 }
-console.log(allSkills);
+localStorage.setItem("allSkills", JSON.stringify(allSkills));
 function showOptionsSignUp() {
     buttonSignUp === null || buttonSignUp === void 0 ? void 0 : buttonSignUp.classList.toggle("buttonActionClicked");
     signUp === null || signUp === void 0 ? void 0 : signUp.classList.toggle("hide");
 }
-function showFormCandidade() {
-    if (!formCompanies.classList.contains("hide")) {
-        formCompanies.classList.add("hide");
+function showFormCandidate() {
+    if (!divFormCompanie.classList.contains("hide")) {
+        divFormCompanie.classList.add("hide");
     }
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
@@ -63,11 +66,11 @@ function showFormCandidade() {
         divToCompanie.classList.add("hide");
         divGraphic.classList.add("hide");
     }
-    formCandidade.classList.remove("hide");
+    divFormCandidate.classList.remove("hide");
 }
-function showFormCompanies() {
-    if (!(formCandidade === null || formCandidade === void 0 ? void 0 : formCandidade.classList.contains("hide"))) {
-        formCandidade === null || formCandidade === void 0 ? void 0 : formCandidade.classList.add("hide");
+function showFormCompanie() {
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
     }
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
@@ -76,11 +79,28 @@ function showFormCompanies() {
         divToCompanie.classList.add("hide");
         divGraphic.classList.add("hide");
     }
-    formCompanies === null || formCompanies === void 0 ? void 0 : formCompanies.classList.remove("hide");
+    divFormCompanie.classList.remove("hide");
 }
 function reload() {
     window.location.reload();
 }
+formCreatCandidate.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const newCanditade = {
+        name: document.getElementById("candidateName").value,
+        email: document.getElementById("candidateEmail").value,
+        cpf: document.getElementById("candidateCpf").value,
+        age: document.getElementById("candidateAge").value,
+        state: document.getElementById("candidateState").value,
+        cep: document.getElementById("candidateCep").value,
+        descripition: document.getElementById("candidateDescripition").value,
+        skills: document.getElementById("candidateSkills").value.split(","),
+        academicEducation: document.getElementById("academicEducation").value.split(","),
+    };
+    candidates.push(newCanditade);
+    localStorage.setItem("candidates", JSON.stringify(candidates));
+    reload();
+});
 function createNewCandidade() {
     const newCanditade = {
         name: document.getElementById("candidateName").value,
@@ -119,11 +139,11 @@ function showToCandidate() {
         divGraphic.classList.add("hide");
         divToCompanie.classList.add("hide");
     }
-    if (!formCompanies.classList.contains("hide")) {
-        formCompanies.classList.add("hide");
+    if (!divFormCompanie.classList.contains("hide")) {
+        divFormCompanie.classList.add("hide");
     }
-    if (!(formCandidade === null || formCandidade === void 0 ? void 0 : formCandidade.classList.contains("hide"))) {
-        formCandidade.classList.add("hide");
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
     }
     if (!clickedShowToCandidate) {
         divToCandidate.innerHTML += htmlToCandidate;
@@ -164,11 +184,11 @@ function showToCompanie() {
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
     }
-    if (!formCompanies.classList.contains("hide")) {
-        formCompanies.classList.add("hide");
+    if (!divFormCompanie.classList.contains("hide")) {
+        divFormCompanie.classList.add("hide");
     }
-    if (!(formCandidade === null || formCandidade === void 0 ? void 0 : formCandidade.classList.contains("hide"))) {
-        formCandidade.classList.add("hide");
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
     }
     if (!clickedShowToCompanie) {
         divToCompanie.innerHTML += htmlToCompanie;
@@ -181,11 +201,10 @@ function showToCompanie() {
 function createGraphic() {
     const skills = [];
     const candidatesForSkills = [];
-    allSkills.forEach((key, value) => {
-        console.log(value, key);
-        candidatesForSkills.push(key);
-        skills.push(value);
-    });
+    for (const skill in allSkills) {
+        skills.push(skill);
+        candidatesForSkills.push(allSkills[skill]);
+    }
     const graphicObjet = {
         type: 'bar',
         data: {
@@ -207,6 +226,7 @@ function createGraphic() {
     const graphicObjetJson = JSON.stringify(graphicObjet);
     scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');
-   new Chart(ctx, ${graphicObjetJson});`;
+   new Chart(ctx, ${graphicObjetJson});
+   `;
     document.body.appendChild(scriptGrafic);
 }
