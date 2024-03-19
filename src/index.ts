@@ -27,6 +27,12 @@ type companie = {
    jobVacancies?: JobVacancies[] | [];
 }
 
+const nameRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
+const emailRegex = new RegExp(/[\w\.]+@[\w]+\.[a-zA-Z]{2,}/);
+const cpfRegex = new RegExp(/\d{3}\.\d{3}\.\d{3}-\d{2}/);
+const ageRegex = new RegExp(/([1-9][4-9]|[1][0-1][0-9])/);
+const cepRegex = new RegExp(/\d{5}-\d{3}/);
+
 const candidates: candidate[] = JSON.parse(localStorage.getItem("candidates") || '[]');
 const companies: companie[] = JSON.parse(localStorage.getItem("companies") || '[]');
 const allSkills = JSON.parse(localStorage.getItem("allSkills") || '[]');  
@@ -43,7 +49,7 @@ const signUp = document.getElementById("signUp");
 const divFormCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLBodyElement);
 const divFormCompanie = (document.getElementById("divFormSignUpCompanies") as HTMLBodyElement);
 
-const formCreatCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLBodyElement);
+const formCreatCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLFormElement);
 const formCreatCompanie = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
 
 let htmlToCandidate: string = ``;
@@ -63,7 +69,7 @@ for (let companie of companies) {
          </div>
       </div>
    </div>
-   `
+   `;
 }
 
 for (const candidate of candidates) {
@@ -86,14 +92,14 @@ for (const candidate of candidates) {
       <p>formação: ${candidate.academicEducation}</p>
       <p>skills: ${candidate.skills}</p>
    </div>
-   `
+   `;
 }
 
 localStorage.setItem("allSkills", JSON.stringify(allSkills));
 
 function showOptionsSignUp(): void {
-   buttonSignUp?.classList.toggle("buttonActionClicked")
-   signUp?.classList.toggle("hide")
+   buttonSignUp?.classList.toggle("buttonActionClicked");
+   signUp?.classList.toggle("hide");
 }
 
 function showFormCandidate(): void {
@@ -111,7 +117,7 @@ function showFormCandidate(): void {
       divGraphic.classList.add("hide")
    }
 
-   divFormCandidate.classList.remove("hide")
+   divFormCandidate.classList.remove("hide");
    
 }
 
@@ -129,11 +135,12 @@ function showFormCompanie(): void {
       divToCompanie.classList.add("hide")
       divGraphic.classList.add("hide")
    }
-   divFormCompanie.classList.remove("hide")
+
+   divFormCompanie.classList.remove("hide");
 }
 
 function reload(): void {
-   window.location.reload()
+   window.location.reload();
 }
 
 formCreatCandidate.addEventListener("submit", (event) => {
@@ -149,30 +156,50 @@ formCreatCandidate.addEventListener("submit", (event) => {
       descripition: (document.getElementById("candidateDescripition") as HTMLFormElement).value,
       skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
       academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
+   };
+
+   if (!nameRegex.test(newCanditade.name)) {
+      alert("Insira um nome no formato válido");
+      return;
+   }
+
+   if (!emailRegex.test(newCanditade.email)) {
+      alert("Insira um email no formato válido");
+      return;
+   }
+
+   if (!cpfRegex.test(newCanditade.cpf)) {
+      alert("Insira um CPF no formato válido");
+      return;
+   }
+
+   if (!ageRegex.test(newCanditade.age)) {
+      alert("Insira uma idade válida");
+      return;
+   }
+
+   if (!cepRegex.test(newCanditade.cep)) {
+      alert("Insira um email no formato válido");
+      return;
    }
 
    candidates.push(newCanditade);
    localStorage.setItem("candidates", JSON.stringify(candidates));
 
+   resetFormCandidate();
    reload();
 })
 
-function createNewCandidade(): void {
-
-   const newCanditade: candidate = {
-      name: (document.getElementById("candidateName") as HTMLFormElement).value,
-      email: (document.getElementById("candidateEmail") as HTMLFormElement).value,
-      cpf: (document.getElementById("candidateCpf") as HTMLFormElement).value,
-      age: (document.getElementById("candidateAge") as HTMLFormElement).value,
-      state: (document.getElementById("candidateState") as HTMLFormElement).value,
-      cep: (document.getElementById("candidateCep") as HTMLFormElement).value,
-      descripition: (document.getElementById("candidateDescripition") as HTMLFormElement).value,
-      skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
-      academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
-   }
-
-   candidates.push(newCanditade);
-   localStorage.setItem("candidates", JSON.stringify(candidates));
+function resetFormCandidate() {
+   (document.getElementById("candidateName") as HTMLFormElement).value = "";
+   (document.getElementById("candidateEmail") as HTMLFormElement).value = "";
+   (document.getElementById("candidateCpf") as HTMLFormElement).value = "";
+   (document.getElementById("candidateAge") as HTMLFormElement).value = "";
+   (document.getElementById("candidateState") as HTMLFormElement).value = "";
+   (document.getElementById("candidateCep") as HTMLFormElement).value = "";
+   (document.getElementById("candidateDescripition") as HTMLFormElement).value = "";
+   (document.getElementById("candidateSkills") as HTMLFormElement).value = "";
+   (document.getElementById("academicEducation") as HTMLFormElement).value= "";
 }
 
 function createNewCompanie(): void {
@@ -189,11 +216,13 @@ function createNewCompanie(): void {
       {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Java", "Javascript", "Sql"]},
       {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Pythion", "Javascript", "React"]}
       ],
-   }
+   };
 
-   companies.push(newCompanie)
-   localStorage.setItem("companies", JSON.stringify(companies))
+   companies.push(newCompanie);
+   localStorage.setItem("companies", JSON.stringify(companies));
 }
+
+
 
 let clickedShowToCandidate = false;
 function showToCandidate(): void {
@@ -249,7 +278,7 @@ function showJobs(id: string) : void {
       `<h2>Não há vagas!</h2>`
       }
    </div>
-   `
+   `;
 }
 
 let clickedShowToCompanie = false;
@@ -272,10 +301,10 @@ function showToCompanie(): void {
       clickedShowToCompanie = true;
    }
 
-   createGraphic()
+   createGraphic();
    
    divToCompanie.classList.remove("hide");
-   divGraphic.classList.remove("hide")
+   divGraphic.classList.remove("hide");
 }
 
 function createGraphic(): void {
@@ -311,7 +340,7 @@ function createGraphic(): void {
    scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');
    new Chart(ctx, ${graphicObjetJson});
-   `
+   `;
 
    document.body.appendChild(scriptGrafic);
 }

@@ -1,4 +1,9 @@
 "use strict";
+const nameRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
+const emailRegex = new RegExp(/[\w\.]+@[\w]+\.[a-zA-Z]{2,}/);
+const cpfRegex = new RegExp(/\d{3}\.\d{3}\.\d{3}-\d{2}/);
+const ageRegex = new RegExp(/([1-9][4-9]|[1][0-1][0-9])/);
+const cepRegex = new RegExp(/\d{5}-\d{3}/);
 const candidates = JSON.parse(localStorage.getItem("candidates") || '[]');
 const companies = JSON.parse(localStorage.getItem("companies") || '[]');
 const allSkills = JSON.parse(localStorage.getItem("allSkills") || '[]');
@@ -97,24 +102,41 @@ formCreatCandidate.addEventListener("submit", (event) => {
         skills: document.getElementById("candidateSkills").value.split(","),
         academicEducation: document.getElementById("academicEducation").value.split(","),
     };
+    if (!nameRegex.test(newCanditade.name)) {
+        alert("Insira um nome no formato válido");
+        return;
+    }
+    if (!emailRegex.test(newCanditade.email)) {
+        alert("Insira um email no formato válido");
+        return;
+    }
+    if (!cpfRegex.test(newCanditade.cpf)) {
+        alert("Insira um CPF no formato válido");
+        return;
+    }
+    if (!ageRegex.test(newCanditade.age)) {
+        alert("Insira uma idade válida");
+        return;
+    }
+    if (!cepRegex.test(newCanditade.cep)) {
+        alert("Insira um email no formato válido");
+        return;
+    }
     candidates.push(newCanditade);
     localStorage.setItem("candidates", JSON.stringify(candidates));
+    resetFormCandidate();
     reload();
 });
-function createNewCandidade() {
-    const newCanditade = {
-        name: document.getElementById("candidateName").value,
-        email: document.getElementById("candidateEmail").value,
-        cpf: document.getElementById("candidateCpf").value,
-        age: document.getElementById("candidateAge").value,
-        state: document.getElementById("candidateState").value,
-        cep: document.getElementById("candidateCep").value,
-        descripition: document.getElementById("candidateDescripition").value,
-        skills: document.getElementById("candidateSkills").value.split(","),
-        academicEducation: document.getElementById("academicEducation").value.split(","),
-    };
-    candidates.push(newCanditade);
-    localStorage.setItem("candidates", JSON.stringify(candidates));
+function resetFormCandidate() {
+    document.getElementById("candidateName").value = "";
+    document.getElementById("candidateEmail").value = "";
+    document.getElementById("candidateCpf").value = "";
+    document.getElementById("candidateAge").value = "";
+    document.getElementById("candidateState").value = "";
+    document.getElementById("candidateCep").value = "";
+    document.getElementById("candidateDescripition").value = "";
+    document.getElementById("candidateSkills").value = "";
+    document.getElementById("academicEducation").value = "";
 }
 function createNewCompanie() {
     const newCompanie = {
