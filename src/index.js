@@ -1,8 +1,10 @@
 "use strict";
-const nameRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
+const nameCandidateRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
+const nameCompanieRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)*/);
 const emailRegex = new RegExp(/[\w\.]+@[\w]+\.[a-zA-Z]{2,}/);
 const cpfRegex = new RegExp(/\d{3}\.\d{3}\.\d{3}-\d{2}/);
-const ageRegex = new RegExp(/([1-9][4-9]|[1][0-1][0-9])/);
+const cnpjRegex = new RegExp(/\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/);
+const ageRegex = new RegExp(/([1-9][0-9]|[1][0-1][0-9])/);
 const cepRegex = new RegExp(/\d{5}-\d{3}/);
 const candidates = JSON.parse(localStorage.getItem("candidates") || '[]');
 const companies = JSON.parse(localStorage.getItem("companies") || '[]');
@@ -14,9 +16,9 @@ const divToCompanie = document.querySelector(".showToCompanie");
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
 const divFormCandidate = document.getElementById("divFormSignUpCandidate");
-const divFormCompanie = document.getElementById("divFormSignUpCompanies");
-const formCreatCandidate = document.getElementById("divFormSignUpCandidate");
-const formCreatCompanie = document.getElementById("divFormSignUpCompanie");
+const divFormCompanie = document.getElementById("divFormSignUpCompanie");
+const formCreateCandidate = document.getElementById("divFormSignUpCandidate");
+const formCreateCompanie = document.getElementById("divFormSignUpCompanie");
 let htmlToCandidate = ``;
 let htmlToCompanie = ``;
 for (let companie of companies) {
@@ -89,7 +91,7 @@ function showFormCompanie() {
 function reload() {
     window.location.reload();
 }
-formCreatCandidate.addEventListener("submit", (event) => {
+formCreateCandidate.addEventListener("submit", (event) => {
     event.preventDefault();
     const newCanditade = {
         name: document.getElementById("candidateName").value,
@@ -102,7 +104,7 @@ formCreatCandidate.addEventListener("submit", (event) => {
         skills: document.getElementById("candidateSkills").value.split(","),
         academicEducation: document.getElementById("academicEducation").value.split(","),
     };
-    if (!nameRegex.test(newCanditade.name)) {
+    if (!nameCandidateRegex.test(newCanditade.name)) {
         alert("Insira um nome no formato válido");
         return;
     }
@@ -119,7 +121,7 @@ formCreatCandidate.addEventListener("submit", (event) => {
         return;
     }
     if (!cepRegex.test(newCanditade.cep)) {
-        alert("Insira um email no formato válido");
+        alert("Insira um CEP no formato válido");
         return;
     }
     candidates.push(newCanditade);
@@ -138,7 +140,8 @@ function resetFormCandidate() {
     document.getElementById("candidateSkills").value = "";
     document.getElementById("academicEducation").value = "";
 }
-function createNewCompanie() {
+formCreateCompanie.addEventListener("submit", (event) => {
+    event.preventDefault();
     const newCompanie = {
         name: document.getElementById("companieName").value,
         email: document.getElementById("companieEmail").value,
@@ -152,8 +155,35 @@ function createNewCompanie() {
             { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Pythion", "Javascript", "React"] }
         ],
     };
+    if (!nameCompanieRegex.test(newCompanie.name)) {
+        alert("Insira um nome no formato válido");
+        return;
+    }
+    if (!emailRegex.test(newCompanie.email)) {
+        alert("Insira um email no formato válido");
+        return;
+    }
+    if (!cnpjRegex.test(newCompanie.cnpj)) {
+        alert("Insira um CNPJ no formato válido");
+        return;
+    }
+    if (!cepRegex.test(newCompanie.cep)) {
+        alert("Insira um CEP no formato válido");
+        return;
+    }
     companies.push(newCompanie);
     localStorage.setItem("companies", JSON.stringify(companies));
+    resetFormCompanie();
+    reload();
+});
+function resetFormCompanie() {
+    document.getElementById("companieName").value = "";
+    document.getElementById("companieEmail").value = "";
+    document.getElementById("companieCnpj").value = "";
+    document.getElementById("companieCountry").value = "";
+    document.getElementById("companieState").value = "";
+    document.getElementById("companieCep").value = "";
+    document.getElementById("companieDescripition").value = "";
 }
 let clickedShowToCandidate = false;
 function showToCandidate() {
