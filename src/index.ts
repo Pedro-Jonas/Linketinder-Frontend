@@ -399,7 +399,7 @@ function createGraphic(): void {
       candidatesForSkills.push(allSkills[skill]);
    }
 
-   const graphicObjet = {
+   const graphicObjet: Object = {
       type: 'bar',
       data: {
         labels: skills,
@@ -418,7 +418,11 @@ function createGraphic(): void {
       }
    };
 
-   //criar uma fuunção showGrafig
+   showGrafig(graphicObjet);
+}
+
+function showGrafig(graphicObjet: Object): void{
+
    const graphicObjetJson = JSON.stringify(graphicObjet);
    scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');
