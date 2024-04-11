@@ -1,4 +1,4 @@
-type JobVacancies = {
+type jobVacancies = {
    title: string;
    description: string;
    skills: string[];
@@ -24,7 +24,7 @@ type companie = {
    state: string;
    cep: string;
    descripition: string;
-   jobVacancies?: JobVacancies[] | [];
+   jobVacancies?: jobVacancies[] | [];
 }
 
 const nameCandidateRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
@@ -57,55 +57,72 @@ const formCreateCompanie = (document.getElementById("divFormSignUpCompanie") as 
 let htmlToCandidate: string = ``;
 let htmlToCompanie: string = ``;
 
-for (let companie of companies) {
 
-   htmlToCandidate += `
-   <div class="boxCompanieAndCandidate">
-      <p>Empresa ${companies.indexOf(companie) + 1}</p>
-      <p>estado: ${companie.state}</p>
-      <p>país: ${companie.country}</p>
-      <p>descrição: ${companie.descripition}</p>
-      <div id=${companies.indexOf(companie)}>
-         <div class="buttonShowJobs" onclick="showJobs(id)" id =${companies.indexOf(companie)}>
-            Ver vagas
-         </div>
-      </div>
-   </div>
-   `;
-}
-
-for (const candidate of candidates) {
-
-   for(const skill of candidate.skills){
-      const skillTrim = skill.trim().toUpperCase();
-      if (allSkills.hasOwnProperty(skillTrim)){
-         let count = allSkills[skillTrim];
-         count? count++ : 0;
-         allSkills[skillTrim] = count? count: 0;
-      } else {
-         allSkills[skillTrim] = 1;
-      }
-   }
-
-   htmlToCompanie += `
-   <div class="boxCompanieAndCandidate">
-      <p>candidato ${candidates.indexOf(candidate) + 1}</p>
-      <p>descrição: ${candidate.descripition}</p>
-      <p>formação: ${candidate.academicEducation}</p>
-      <p>skills: ${candidate.skills}</p>
-   </div>
-   `;
-}
-
-localStorage.setItem("allSkills", JSON.stringify(allSkills));
+creatListCompanies()
+creatListCandidates()
 
 function showOptionsSignUp(): void {
    buttonSignUp?.classList.toggle("buttonActionClicked");
    signUp?.classList.toggle("hide");
 }
 
+function reload(): void {
+   window.location.reload();
+}
+
+function creatListCompanies() : void {
+
+   for (let companie of companies) {
+
+      htmlToCandidate += `
+      <div class="boxCompanieAndCandidate">
+         <p>Empresa ${companies.indexOf(companie) + 1}</p>
+         <p>estado: ${companie.state}</p>
+         <p>país: ${companie.country}</p>
+         <p>descrição: ${companie.descripition}</p>
+         <div id=${companies.indexOf(companie)}>
+            <div class="buttonShowJobs" onclick="showJobs(id)" id =${companies.indexOf(companie)}>
+               Ver vagas
+            </div>
+         </div>
+      </div>
+      `;
+   }
+}
+
+function creatListCandidates() : void {
+
+   for (const candidate of candidates) {
+      //criar função para pegar skills
+      for(const skill of candidate.skills){
+         const skillTrim = skill.trim().toUpperCase();
+         if (allSkills.hasOwnProperty(skillTrim)){
+            let count = allSkills[skillTrim];
+            count? count++ : 0;
+            allSkills[skillTrim] = count? count: 0;
+         } else {
+            allSkills[skillTrim] = 1;
+         }
+      }
+   
+      htmlToCompanie += `
+      <div class="boxCompanieAndCandidate">
+         <p>candidato ${candidates.indexOf(candidate) + 1}</p>
+         <p>descrição: ${candidate.descripition}</p>
+         <p>formação: ${candidate.academicEducation}</p>
+         <p>skills: ${candidate.skills}</p>
+      </div>
+      `;
+   }
+
+   //jogar para dentro da função de pegar skills
+   localStorage.setItem("allSkills", JSON.stringify(allSkills));
+}
+
+
 function showFormCandidate(): void {
 
+   //tentar reaproveitar os ifs
    if (!divFormCompanie.classList.contains("hide")) {
       divFormCompanie.classList.add("hide")
    }
@@ -124,7 +141,7 @@ function showFormCandidate(): void {
 }
 
 function showFormCompanie(): void {
-
+   //tentar reaproveitar os ifs
    if (!divFormCandidate.classList.contains("hide")) {
       divFormCandidate.classList.add("hide")
    }
@@ -141,13 +158,10 @@ function showFormCompanie(): void {
    divFormCompanie.classList.remove("hide");
 }
 
-function reload(): void {
-   window.location.reload();
-}
-
 formCreateCandidate.addEventListener("submit", (event) => {
    event.preventDefault();
 
+   //jogar os gets para fora da função
    const newCanditade: candidate = {
       name: (document.getElementById("candidateName") as HTMLFormElement).value,
       email: (document.getElementById("candidateEmail") as HTMLFormElement).value,
@@ -159,7 +173,7 @@ formCreateCandidate.addEventListener("submit", (event) => {
       skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
       academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
    };
-
+   //criar uma função que faz o validação
    if (!nameCandidateRegex.test(newCanditade.name)) {
       alert("Insira um nome no formato válido");
       return;
@@ -185,14 +199,18 @@ formCreateCandidate.addEventListener("submit", (event) => {
       return;
    }
 
+   //fazer função para adicionar candodidato
    candidates.push(newCanditade);
    localStorage.setItem("candidates", JSON.stringify(candidates));
 
    resetFormCandidate();
+
    reload();
 })
 
 function resetFormCandidate() {
+
+   //usar o gets que foram para fora
    (document.getElementById("candidateName") as HTMLFormElement).value = "";
    (document.getElementById("candidateEmail") as HTMLFormElement).value = "";
    (document.getElementById("candidateCpf") as HTMLFormElement).value = "";
@@ -207,6 +225,7 @@ function resetFormCandidate() {
 formCreateCompanie.addEventListener("submit", (event) => {
    event.preventDefault();
 
+   //jogar os gets para fora da função
    const newCompanie: companie = {
       name: (document.getElementById("companieName") as HTMLFormElement).value,
       email: (document.getElementById("companieEmail") as HTMLFormElement).value,
@@ -217,10 +236,11 @@ formCreateCompanie.addEventListener("submit", (event) => {
       descripition: (document.getElementById("companieDescripition") as HTMLFormElement).value,
       jobVacancies: [
       {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Java", "Javascript", "Sql"]},
-      {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Pythion", "Javascript", "React"]}
+      {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Python", "Javascript", "React"]}
       ],
    };
 
+   //criar uma função que faz o validação
    if (!nameCompanieRegex.test(newCompanie.name)) {
       alert("Insira um nome no formato válido");
       return;
@@ -241,14 +261,19 @@ formCreateCompanie.addEventListener("submit", (event) => {
       return;
    }
 
+   //fazer função para adicionar empresa
    companies.push(newCompanie);
    localStorage.setItem("companies", JSON.stringify(companies));
 
    resetFormCompanie();
-   reload();
+
+   reload(); 
 })
 
 function resetFormCompanie() {
+   
+
+   //usar o gets que foram para fora
    (document.getElementById("companieName") as HTMLFormElement).value = "";
    (document.getElementById("companieEmail") as HTMLFormElement).value = "";
    (document.getElementById("companieCnpj") as HTMLFormElement).value = "";
@@ -260,7 +285,7 @@ function resetFormCompanie() {
 
 let clickedShowToCandidate = false;
 function showToCandidate(): void {
-
+   //tentar reaproveitar os ifs
    if (!divToCompanie.classList.contains("hide")) {
       divGraphic.classList.add("hide")
       divToCompanie.classList.add("hide")
@@ -283,10 +308,10 @@ function showToCandidate(): void {
 }
 
 function showJobs(id: string) : void {
-
-   const searchCompanie = (document.getElementById(id) as HTMLBodyElement);
+   //criar funçaõ para criar as vagas
    const idNumber = parseInt(id);
    const vacancies = companies[idNumber].jobVacancies;
+
    let hmtlVacancies = ``;
 
    if (vacancies) {
@@ -305,6 +330,9 @@ function showJobs(id: string) : void {
       } 
    }
 
+   //criar função que adiciona vagas na compania
+   const searchCompanie = (document.getElementById(id) as HTMLBodyElement);
+
    searchCompanie.innerHTML = `
    <div class="vacancies">
       ${companies[idNumber].jobVacancies ?
@@ -317,7 +345,7 @@ function showJobs(id: string) : void {
 
 let clickedShowToCompanie = false;
 function showToCompanie(): void {
-
+   //tentar reaproveitar os ifs
    if (!divToCandidate.classList.contains("hide")) {
       divToCandidate.classList.add("hide")
    }
@@ -370,6 +398,7 @@ function createGraphic(): void {
       }
    };
 
+   //criar uma fuunção showGrafig
    const graphicObjetJson = JSON.stringify(graphicObjet);
    scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');
