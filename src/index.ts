@@ -2,7 +2,7 @@ type jobVacancies = {
    title: string;
    description: string;
    skills: string[];
-}
+};
 
 type candidate = {
    name: string;
@@ -14,7 +14,7 @@ type candidate = {
    descripition: string;
    skills: string[];
    academicEducation: string[];
-}
+};
 
 type companie = {
    name: string;
@@ -25,7 +25,7 @@ type companie = {
    cep: string;
    descripition: string;
    jobVacancies?: jobVacancies[] | [];
-}
+};
 
 const nameCandidateRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
 const nameCompanieRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)*/);
@@ -95,14 +95,16 @@ function creatListCandidates() : void {
    for (const candidate of candidates) {
       //criar função para pegar skills
       for(const skill of candidate.skills){
+
          const skillTrim = skill.trim().toUpperCase();
+
          if (allSkills.hasOwnProperty(skillTrim)){
-            let count = allSkills[skillTrim];
-            count? count++ : 0;
-            allSkills[skillTrim] = count? count: 0;
+            let count = allSkills[skillTrim]
+            count? count++ : 0
+            allSkills[skillTrim] = count? count: 0
          } else {
-            allSkills[skillTrim] = 1;
-         }
+            allSkills[skillTrim] = 1
+         };
       }
    
       htmlToCompanie += `
@@ -125,16 +127,16 @@ function showFormCandidate(): void {
    //tentar reaproveitar os ifs
    if (!divFormCompanie.classList.contains("hide")) {
       divFormCompanie.classList.add("hide")
-   }
+   };
 
    if (!divToCandidate.classList.contains("hide")) {
       divToCandidate.classList.add("hide")
-   }
+   };
 
    if (!divToCompanie.classList.contains("hide")) {
       divToCompanie.classList.add("hide")
       divGraphic.classList.add("hide")
-   }
+   };
 
    divFormCandidate.classList.remove("hide");
    
@@ -144,16 +146,16 @@ function showFormCompanie(): void {
    //tentar reaproveitar os ifs
    if (!divFormCandidate.classList.contains("hide")) {
       divFormCandidate.classList.add("hide")
-   }
+   };
 
    if (!divToCandidate.classList.contains("hide")) {
       divToCandidate.classList.add("hide")
-   }
+   };
 
    if (!divToCompanie.classList.contains("hide")) {
       divToCompanie.classList.add("hide")
       divGraphic.classList.add("hide")
-   }
+   };
 
    divFormCompanie.classList.remove("hide");
 }
@@ -173,43 +175,53 @@ formCreateCandidate.addEventListener("submit", (event) => {
       skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
       academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
    };
-   //criar uma função que faz o validação
-   if (!nameCandidateRegex.test(newCanditade.name)) {
-      alert("Insira um nome no formato válido");
-      return;
-   }
 
-   if (!emailRegex.test(newCanditade.email)) {
-      alert("Insira um email no formato válido");
-      return;
-   }
-
-   if (!cpfRegex.test(newCanditade.cpf)) {
-      alert("Insira um CPF no formato válido");
-      return;
-   }
-
-   if (!ageRegex.test(newCanditade.age)) {
-      alert("Insira uma idade válida");
-      return;
-   }
-
-   if (!cepRegex.test(newCanditade.cep)) {
-      alert("Insira um CEP no formato válido");
-      return;
-   }
-
-   //fazer função para adicionar candodidato
-   candidates.push(newCanditade);
-   localStorage.setItem("candidates", JSON.stringify(candidates));
-
-   resetFormCandidate();
-
-   reload();
+   addNewCandidate(newCanditade);
 })
 
-function resetFormCandidate() {
+function validateFormCandidate(candidate: candidate): boolean {
 
+   if (!nameCandidateRegex.test(candidate.name)) {
+      alert("Insira um nome no formato válido")
+      return false
+   };
+
+   if (!emailRegex.test(candidate.email)) {
+      alert("Insira um email no formato válido")
+      return false
+   };
+
+   if (!cpfRegex.test(candidate.cpf)) {
+      alert("Insira um CPF no formato válido")
+      return false
+   };
+
+   if (!ageRegex.test(candidate.age)) {
+      alert("Insira uma idade válida")
+      return false
+   };
+
+   if (!cepRegex.test(candidate.cep)) {
+      alert("Insira um CEP no formato válido")
+      return false
+   };
+
+   return true;
+}
+
+function addNewCandidate(candidate: candidate): void{
+
+   if (validateFormCandidate(candidate)){
+      candidates.push(candidate)
+      localStorage.setItem("candidates", JSON.stringify(candidates))
+
+      resetFormCandidate()
+      reload()
+   };
+}
+
+function resetFormCandidate(): void {
+ 
    //usar o gets que foram para fora
    (document.getElementById("candidateName") as HTMLFormElement).value = "";
    (document.getElementById("candidateEmail") as HTMLFormElement).value = "";
@@ -240,39 +252,47 @@ formCreateCompanie.addEventListener("submit", (event) => {
       ],
    };
 
-   //criar uma função que faz o validação
-   if (!nameCompanieRegex.test(newCompanie.name)) {
-      alert("Insira um nome no formato válido");
-      return;
-   }
-
-   if (!emailRegex.test(newCompanie.email)) {
-      alert("Insira um email no formato válido");
-      return;
-   }
-
-   if (!cnpjRegex.test(newCompanie.cnpj)) {
-      alert("Insira um CNPJ no formato válido");
-      return;
-   }
-
-   if (!cepRegex.test(newCompanie.cep)) {
-      alert("Insira um CEP no formato válido");
-      return;
-   }
-
-   //fazer função para adicionar empresa
-   companies.push(newCompanie);
-   localStorage.setItem("companies", JSON.stringify(companies));
-
-   resetFormCompanie();
-
-   reload(); 
+   addNewCompanie(newCompanie);
 })
+
+function validateFormCompanie(companie: companie): boolean{
+
+   if (!nameCompanieRegex.test(companie.name)) {
+      alert("Insira um nome no formato válido")
+      return false
+   };
+
+   if (!emailRegex.test(companie.email)) {
+      alert("Insira um email no formato válido")
+      return false
+   };
+
+   if (!cnpjRegex.test(companie.cnpj)) {
+      alert("Insira um CNPJ no formato válido");
+      return false;
+   };
+
+   if (!cepRegex.test(companie.cep)) {
+      alert("Insira um CEP no formato válido");
+      return false;
+   };
+
+   return true;
+}
+
+function addNewCompanie(companie: companie): void{
+
+   if (validateFormCompanie(companie)) { 
+      companies.push(companie)
+      localStorage.setItem("companies", JSON.stringify(companies));
+
+      resetFormCompanie()
+      reload()
+   } 
+}
 
 function resetFormCompanie() {
    
-
    //usar o gets que foram para fora
    (document.getElementById("companieName") as HTMLFormElement).value = "";
    (document.getElementById("companieEmail") as HTMLFormElement).value = "";
