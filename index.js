@@ -30,13 +30,15 @@ const cepFormCandidate = document.getElementById("candidateCep");
 const descripitionFormCandidate = document.getElementById("candidateDescripition");
 const skillsFormCandidate = document.getElementById("candidateSkills");
 const academicEducationFormCandidate = document.getElementById("academicEducation");
-const nameFormCompany = document.getElementById("companieName");
-const emailFormCompany = document.getElementById("companieEmail");
-const cnpjFormCompany = document.getElementById("candidateCpf");
-const countryFormCompany = document.getElementById("companieCountry");
-const stateFormCompany = document.getElementById("companieState");
-const cepFormCompany = document.getElementById("companieCep");
-const descripitionFormCompany = document.getElementById("companieDescripition");
+const nameFormCompany = document.getElementById("candidateName");
+const emailFormCompany = document.getElementById("candidateEmail");
+const cpfFormCompany = document.getElementById("candidateCpf");
+const ageFormCompany = document.getElementById("candidateAge");
+const stateFormCompany = document.getElementById("candidateState");
+const cepFormCompany = document.getElementById("candidateCep");
+const descripitionFormCompany = document.getElementById("candidateDescripition");
+const skillsFormCompany = document.getElementById("candidateSkills");
+const academicEducationFormCompany = document.getElementById("academicEducation");
 creatListCompanies();
 creatListCandidates();
 function showOptionsSignUp() {
@@ -89,11 +91,37 @@ function addSkills(candidate) {
     localStorage.setItem("allSkills", JSON.stringify(allSkills));
 }
 function showFormCandidate() {
-    hideAll();
+    //tentar reaproveitar os ifs
+    if (!divFormCompany.classList.contains("hide")) {
+        divFormCompany.classList.add("hide");
+    }
+    ;
+    if (!divToCandidate.classList.contains("hide")) {
+        divToCandidate.classList.add("hide");
+    }
+    ;
+    if (!divToCompany.classList.contains("hide")) {
+        divToCompany.classList.add("hide");
+        divGraphic.classList.add("hide");
+    }
+    ;
     divFormCandidate.classList.remove("hide");
 }
 function showFormCompany() {
-    hideAll();
+    //tentar reaproveitar os ifs
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
+    }
+    ;
+    if (!divToCandidate.classList.contains("hide")) {
+        divToCandidate.classList.add("hide");
+    }
+    ;
+    if (!divToCompany.classList.contains("hide")) {
+        divToCompany.classList.add("hide");
+        divGraphic.classList.add("hide");
+    }
+    ;
     divFormCompany.classList.remove("hide");
 }
 formCreateCandidate.addEventListener("submit", (event) => {
@@ -161,14 +189,15 @@ function resetFormCandidate() {
 }
 formCreateCompany.addEventListener("submit", (event) => {
     event.preventDefault();
+    //jogar os gets para fora da função
     const newCompany = {
-        name: nameFormCompany.value,
-        email: emailFormCompany.value,
-        cnpj: cnpjFormCompany.value,
-        country: countryFormCompany.value,
-        state: stateFormCompany.value,
-        cep: cepFormCompany.value,
-        descripition: descripitionFormCompany.value,
+        name: document.getElementById("companieName").value,
+        email: document.getElementById("companieEmail").value,
+        cnpj: document.getElementById("companieCnpj").value,
+        country: document.getElementById("companieCountry").value,
+        state: document.getElementById("companieState").value,
+        cep: document.getElementById("companieCep").value,
+        descripition: document.getElementById("companieDescripition").value,
         jobVacancies: [
             { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Java", "Javascript", "Sql"] },
             { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Python", "Javascript", "React"] }
@@ -208,22 +237,32 @@ function addNewCompany(company) {
     }
 }
 function resetFormCompany() {
-    nameFormCandidate.value = "";
-    emailFormCandidate.value = "";
-    cpfFormCandidate.value = "";
-    ageFormCandidate.value = "";
-    stateFormCandidate.value = "";
-    cepFormCandidate.value = "";
-    descripitionFormCandidate.value = "";
+    //usar o gets que foram para fora
+    document.getElementById("companieName").value = "";
+    document.getElementById("companieEmail").value = "";
+    document.getElementById("companieCnpj").value = "";
+    document.getElementById("companieCountry").value = "";
+    document.getElementById("companieState").value = "";
+    document.getElementById("companieCep").value = "";
+    document.getElementById("companieDescripition").value = "";
 }
 let clickedShowToCandidate = false;
 function showToCandidate() {
-    hideAll();
+    //tentar reaproveitar os ifs
+    if (!divToCompany.classList.contains("hide")) {
+        divGraphic.classList.add("hide");
+        divToCompany.classList.add("hide");
+    }
+    if (!divFormCompany.classList.contains("hide")) {
+        divFormCompany.classList.add("hide");
+    }
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
+    }
     if (!clickedShowToCandidate) {
         divToCandidate.innerHTML += htmlToCandidate;
         clickedShowToCandidate = true;
     }
-    ;
     divToCandidate.classList.remove("hide");
 }
 function showJobs(id) {
@@ -262,7 +301,16 @@ function createJobVacancies(id) {
 }
 let clickedShowToCompany = false;
 function showToCompany() {
-    hideAll();
+    //tentar reaproveitar os ifs
+    if (!divToCandidate.classList.contains("hide")) {
+        divToCandidate.classList.add("hide");
+    }
+    if (!divFormCompany.classList.contains("hide")) {
+        divFormCompany.classList.add("hide");
+    }
+    if (!divFormCandidate.classList.contains("hide")) {
+        divFormCandidate.classList.add("hide");
+    }
     if (!clickedShowToCompany) {
         divToCompany.innerHTML += htmlToCompany;
         clickedShowToCompany = true;
@@ -308,19 +356,4 @@ function showGrafig(graphicObjet) {
 }
 function reload() {
     window.location.reload();
-}
-function hideAll() {
-    if (!divToCandidate.classList.contains("hide")) {
-        divToCandidate.classList.add("hide");
-    }
-    if (!divToCompany.classList.contains("hide")) {
-        divGraphic.classList.add("hide");
-        divToCompany.classList.add("hide");
-    }
-    if (!divFormCompany.classList.contains("hide")) {
-        divFormCompany.classList.add("hide");
-    }
-    if (!divFormCandidate.classList.contains("hide")) {
-        divFormCandidate.classList.add("hide");
-    }
 }

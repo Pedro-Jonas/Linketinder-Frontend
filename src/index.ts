@@ -16,7 +16,7 @@ type candidate = {
    academicEducation: string[];
 };
 
-type companie = {
+type company = {
    name: string;
    email: string;
    cnpj: string;
@@ -28,7 +28,7 @@ type companie = {
 };
 
 const nameCandidateRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)+/);
-const nameCompanieRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)*/);
+const nameCompanyRegex = new RegExp(/[A-Za-zà-ü]+(?: [A-za-zà-ü]+)*/);
 const emailRegex = new RegExp(/[\w\.]+@[\w]+\.[a-zA-Z]{2,}/);
 const cpfRegex = new RegExp(/\d{3}\.\d{3}\.\d{3}-\d{2}/);
 const cnpjRegex = new RegExp(/\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}/);
@@ -36,27 +36,44 @@ const ageRegex = new RegExp(/([1-9][0-9]|[1][0-1][0-9])/);
 const cepRegex = new RegExp(/\d{5}-\d{3}/);
 
 const candidates: candidate[] = JSON.parse(localStorage.getItem("candidates") || '[]');
-const companies: companie[] = JSON.parse(localStorage.getItem("companies") || '[]');
+const companies: company[] = JSON.parse(localStorage.getItem("companies") || '[]');
 const allSkills = JSON.parse(localStorage.getItem("allSkills") || '[]');  
 
 const divGraphic = document.getElementById("graphic") as HTMLBodyElement;
 const scriptGrafic = document.createElement("script");
 
 const divToCandidate = document.querySelector(".showToCandidate") as HTMLBodyElement;
-const divToCompanie = document.querySelector(".showToCompanie") as HTMLBodyElement;
+const divToCompany = document.querySelector(".showToCompanie") as HTMLBodyElement;
 
 const buttonSignUp = document.getElementById("buttonSignUp");
 const signUp = document.getElementById("signUp");
 
 const divFormCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLBodyElement);
-const divFormCompanie = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
+const divFormCompany = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
 
 const formCreateCandidate = (document.getElementById("divFormSignUpCandidate") as HTMLFormElement);
-const formCreateCompanie = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
+const formCreateCompany = (document.getElementById("divFormSignUpCompanie") as HTMLBodyElement);
 
 let htmlToCandidate: string = ``;
-let htmlToCompanie: string = ``;
+let htmlToCompany: string = ``;
 
+const nameFormCandidate =  (document.getElementById("candidateName") as HTMLFormElement);
+const emailFormCandidate = (document.getElementById("candidateEmail") as HTMLFormElement);
+const cpfFormCandidate = (document.getElementById("candidateCpf") as HTMLFormElement);
+const ageFormCandidate = (document.getElementById("candidateAge") as HTMLFormElement);
+const stateFormCandidate = (document.getElementById("candidateState") as HTMLFormElement);
+const cepFormCandidate = (document.getElementById("candidateCep") as HTMLFormElement);
+const descripitionFormCandidate = (document.getElementById("candidateDescripition") as HTMLFormElement);
+const skillsFormCandidate = (document.getElementById("candidateSkills") as HTMLFormElement);
+const academicEducationFormCandidate  = (document.getElementById("academicEducation") as HTMLFormElement);
+
+const nameFormCompany =  (document.getElementById("companieName") as HTMLFormElement);
+const emailFormCompany = (document.getElementById("companieEmail") as HTMLFormElement);
+const cnpjFormCompany = (document.getElementById("candidateCpf") as HTMLFormElement);
+const countryFormCompany = (document.getElementById("companieCountry") as HTMLFormElement);
+const stateFormCompany = (document.getElementById("companieState") as HTMLFormElement);
+const cepFormCompany = (document.getElementById("companieCep") as HTMLFormElement);
+const descripitionFormCompany = (document.getElementById("companieDescripition") as HTMLFormElement);
 
 creatListCompanies()
 creatListCandidates()
@@ -64,10 +81,6 @@ creatListCandidates()
 function showOptionsSignUp(): void {
    buttonSignUp?.classList.toggle("buttonActionClicked");
    signUp?.classList.toggle("hide");
-}
-
-function reload(): void {
-   window.location.reload();
 }
 
 function creatListCompanies() : void {
@@ -95,7 +108,7 @@ function creatListCandidates() : void {
    for (const candidate of candidates) {
       addSkills(candidate)
 
-      htmlToCompanie += `
+      htmlToCompany += `
       <div class="boxCompanieAndCandidate">
          <p>candidato ${candidates.indexOf(candidate) + 1}</p>
          <p>descrição: ${candidate.descripition}</p>
@@ -127,56 +140,32 @@ function addSkills(candidate: candidate): void {
 
 function showFormCandidate(): void {
 
-   //tentar reaproveitar os ifs
-   if (!divFormCompanie.classList.contains("hide")) {
-      divFormCompanie.classList.add("hide")
-   };
-
-   if (!divToCandidate.classList.contains("hide")) {
-      divToCandidate.classList.add("hide")
-   };
-
-   if (!divToCompanie.classList.contains("hide")) {
-      divToCompanie.classList.add("hide")
-      divGraphic.classList.add("hide")
-   };
+   hideAll();
 
    divFormCandidate.classList.remove("hide");
    
 }
 
-function showFormCompanie(): void {
-   //tentar reaproveitar os ifs
-   if (!divFormCandidate.classList.contains("hide")) {
-      divFormCandidate.classList.add("hide")
-   };
+function showFormCompany(): void {
 
-   if (!divToCandidate.classList.contains("hide")) {
-      divToCandidate.classList.add("hide")
-   };
+   hideAll()
 
-   if (!divToCompanie.classList.contains("hide")) {
-      divToCompanie.classList.add("hide")
-      divGraphic.classList.add("hide")
-   };
-
-   divFormCompanie.classList.remove("hide");
+   divFormCompany.classList.remove("hide");
 }
 
 formCreateCandidate.addEventListener("submit", (event) => {
    event.preventDefault();
 
-   //jogar os gets para fora da função
    const newCanditade: candidate = {
-      name: (document.getElementById("candidateName") as HTMLFormElement).value,
-      email: (document.getElementById("candidateEmail") as HTMLFormElement).value,
-      cpf: (document.getElementById("candidateCpf") as HTMLFormElement).value,
-      age: (document.getElementById("candidateAge") as HTMLFormElement).value,
-      state: (document.getElementById("candidateState") as HTMLFormElement).value,
-      cep: (document.getElementById("candidateCep") as HTMLFormElement).value,
-      descripition: (document.getElementById("candidateDescripition") as HTMLFormElement).value,
-      skills: (document.getElementById("candidateSkills") as HTMLFormElement).value.split(","),
-      academicEducation : (document.getElementById("academicEducation") as HTMLFormElement).value.split(","),
+      name: nameFormCandidate.value,
+      email: emailFormCandidate.value,
+      cpf: cpfFormCandidate.value,
+      age: ageFormCandidate.value,
+      state: stateFormCandidate.value,
+      cep: cepFormCandidate.value,
+      descripition: descripitionFormCandidate.value,
+      skills: skillsFormCandidate.value.split(","),
+      academicEducation : academicEducationFormCandidate.value.split(","),
    };
 
    addNewCandidate(newCanditade);
@@ -225,57 +214,55 @@ function addNewCandidate(candidate: candidate): void{
 
 function resetFormCandidate(): void {
  
-   //usar o gets que foram para fora
-   (document.getElementById("candidateName") as HTMLFormElement).value = "";
-   (document.getElementById("candidateEmail") as HTMLFormElement).value = "";
-   (document.getElementById("candidateCpf") as HTMLFormElement).value = "";
-   (document.getElementById("candidateAge") as HTMLFormElement).value = "";
-   (document.getElementById("candidateState") as HTMLFormElement).value = "";
-   (document.getElementById("candidateCep") as HTMLFormElement).value = "";
-   (document.getElementById("candidateDescripition") as HTMLFormElement).value = "";
-   (document.getElementById("candidateSkills") as HTMLFormElement).value = "";
-   (document.getElementById("academicEducation") as HTMLFormElement).value= "";
+   nameFormCandidate.value = "";
+   emailFormCandidate.value = "";
+   cpfFormCandidate.value = "";
+   ageFormCandidate.value = "";
+   stateFormCandidate.value = "";
+   cepFormCandidate.value = "";
+   descripitionFormCandidate.value = "";
+   skillsFormCandidate.value = "";
+   academicEducationFormCandidate.value = "";
 }
 
-formCreateCompanie.addEventListener("submit", (event) => {
+formCreateCompany.addEventListener("submit", (event) => {
    event.preventDefault();
 
-   //jogar os gets para fora da função
-   const newCompanie: companie = {
-      name: (document.getElementById("companieName") as HTMLFormElement).value,
-      email: (document.getElementById("companieEmail") as HTMLFormElement).value,
-      cnpj: (document.getElementById("companieCnpj") as HTMLFormElement).value,
-      country: (document.getElementById("companieCountry") as HTMLFormElement).value,
-      state: (document.getElementById("companieState") as HTMLFormElement).value,
-      cep: (document.getElementById("companieCep") as HTMLFormElement).value,
-      descripition: (document.getElementById("companieDescripition") as HTMLFormElement).value,
+   const newCompany: company = {
+      name: nameFormCompany.value,
+      email: emailFormCompany.value,
+      cnpj: cnpjFormCompany.value,
+      country: countryFormCompany.value,
+      state: stateFormCompany.value,
+      cep: cepFormCompany.value,
+      descripition: descripitionFormCompany.value,
       jobVacancies: [
       {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Java", "Javascript", "Sql"]},
       {title: "(nome da vaga)", description: "descrição da vaga", skills: ["Python", "Javascript", "React"]}
       ],
    };
 
-   addNewCompanie(newCompanie);
+   addNewCompany(newCompany);
 })
 
-function validateFormCompanie(companie: companie): boolean{
+function validateFormCompany(company: company): boolean{
 
-   if (!nameCompanieRegex.test(companie.name)) {
+   if (!nameCompanyRegex.test(company.name)) {
       alert("Insira um nome no formato válido")
       return false
    };
 
-   if (!emailRegex.test(companie.email)) {
+   if (!emailRegex.test(company.email)) {
       alert("Insira um email no formato válido")
       return false
    };
 
-   if (!cnpjRegex.test(companie.cnpj)) {
+   if (!cnpjRegex.test(company.cnpj)) {
       alert("Insira um CNPJ no formato válido");
       return false;
    };
 
-   if (!cepRegex.test(companie.cep)) {
+   if (!cepRegex.test(company.cep)) {
       alert("Insira um CEP no formato válido");
       return false;
    };
@@ -283,49 +270,37 @@ function validateFormCompanie(companie: companie): boolean{
    return true;
 }
 
-function addNewCompanie(companie: companie): void{
+function addNewCompany(company: company): void{
 
-   if (validateFormCompanie(companie)) { 
-      companies.push(companie)
+   if (validateFormCompany(company)) { 
+      companies.push(company)
       localStorage.setItem("companies", JSON.stringify(companies));
 
-      resetFormCompanie()
+      resetFormCompany()
       reload()
    } 
 }
 
-function resetFormCompanie() {
-   
-   //usar o gets que foram para fora
-   (document.getElementById("companieName") as HTMLFormElement).value = "";
-   (document.getElementById("companieEmail") as HTMLFormElement).value = "";
-   (document.getElementById("companieCnpj") as HTMLFormElement).value = "";
-   (document.getElementById("companieCountry") as HTMLFormElement).value = "";
-   (document.getElementById("companieState") as HTMLFormElement).value = "";
-   (document.getElementById("companieCep") as HTMLFormElement).value = "";
-   (document.getElementById("companieDescripition") as HTMLFormElement).value = "";
+function resetFormCompany() {
+
+   nameFormCandidate.value = "";
+   emailFormCandidate.value = "";
+   cpfFormCandidate.value = "";
+   ageFormCandidate.value = "";
+   stateFormCandidate.value = "";
+   cepFormCandidate.value = "";
+   descripitionFormCandidate.value = "";
 }
 
 let clickedShowToCandidate = false;
 function showToCandidate(): void {
-   //tentar reaproveitar os ifs
-   if (!divToCompanie.classList.contains("hide")) {
-      divGraphic.classList.add("hide")
-      divToCompanie.classList.add("hide")
-   }
-
-   if (!divFormCompanie.classList.contains("hide")) {
-      divFormCompanie.classList.add("hide")
-   }
-
-   if (!divFormCandidate.classList.contains("hide")) {
-      divFormCandidate.classList.add("hide")
-   }
+   
+   hideAll();
 
    if (!clickedShowToCandidate) {
       divToCandidate.innerHTML += htmlToCandidate;
       clickedShowToCandidate = true;
-   }
+   };
 
    divToCandidate.classList.remove("hide");
 }
@@ -371,29 +346,19 @@ function createJobVacancies(id: string) : string {
 }
 
 
-let clickedShowToCompanie = false;
-function showToCompanie(): void {
-   //tentar reaproveitar os ifs
-   if (!divToCandidate.classList.contains("hide")) {
-      divToCandidate.classList.add("hide")
-   }
+let clickedShowToCompany = false;
+function showToCompany(): void {
+   
+   hideAll();
 
-   if (!divFormCompanie.classList.contains("hide")) {
-      divFormCompanie.classList.add("hide")
-   }
-
-   if (!divFormCandidate.classList.contains("hide")) {
-      divFormCandidate.classList.add("hide")
-   }
-
-   if (!clickedShowToCompanie) {
-      divToCompanie.innerHTML += htmlToCompanie;
-      clickedShowToCompanie = true;
+   if (!clickedShowToCompany) {
+      divToCompany.innerHTML += htmlToCompany;
+      clickedShowToCompany = true;
    }
 
    createGraphic();
    
-   divToCompanie.classList.remove("hide");
+   divToCompany.classList.remove("hide");
    divGraphic.classList.remove("hide");
 }
 
@@ -438,4 +403,28 @@ function showGrafig(graphicObjet: Object): void{
    `;
 
    document.body.appendChild(scriptGrafic);
+}
+
+function reload(): void {
+   window.location.reload();
+}
+
+function hideAll(): void{
+
+   if (!divToCandidate.classList.contains("hide")) {
+      divToCandidate.classList.add("hide")
+   }
+
+   if (!divToCompany.classList.contains("hide")) {
+      divGraphic.classList.add("hide")
+      divToCompany.classList.add("hide")
+   }
+
+   if (!divFormCompany.classList.contains("hide")) {
+      divFormCompany.classList.add("hide")
+   }
+
+   if (!divFormCandidate.classList.contains("hide")) {
+      divFormCandidate.classList.add("hide")
+   }
 }
