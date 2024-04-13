@@ -21,22 +21,46 @@ const formCreateCandidate = document.getElementById("divFormSignUpCandidate");
 const formCreateCompanie = document.getElementById("divFormSignUpCompanie");
 let htmlToCandidate = ``;
 let htmlToCompanie = ``;
-for (let companie of companies) {
-    htmlToCandidate += `
-   <div class="boxCompanieAndCandidate">
-      <p>Empresa ${companies.indexOf(companie) + 1}</p>
-      <p>estado: ${companie.state}</p>
-      <p>país: ${companie.country}</p>
-      <p>descrição: ${companie.descripition}</p>
-      <div id=${companies.indexOf(companie)}>
-         <div class="buttonShowJobs" onclick="showJobs(id)" id =${companies.indexOf(companie)}>
-            Ver vagas
+creatListCompanies();
+creatListCandidates();
+function showOptionsSignUp() {
+    buttonSignUp === null || buttonSignUp === void 0 ? void 0 : buttonSignUp.classList.toggle("buttonActionClicked");
+    signUp === null || signUp === void 0 ? void 0 : signUp.classList.toggle("hide");
+}
+function reload() {
+    window.location.reload();
+}
+function creatListCompanies() {
+    for (let companie of companies) {
+        htmlToCandidate += `
+      <div class="boxCompanieAndCandidate">
+         <p>Empresa ${companies.indexOf(companie) + 1}</p>
+         <p>estado: ${companie.state}</p>
+         <p>país: ${companie.country}</p>
+         <p>descrição: ${companie.descripition}</p>
+         <div id=${companies.indexOf(companie)}>
+            <div class="buttonShowJobs" onclick="showJobs(id)" id =${companies.indexOf(companie)}>
+               Ver vagas
+            </div>
          </div>
       </div>
-   </div>
-   `;
+      `;
+    }
 }
-for (const candidate of candidates) {
+function creatListCandidates() {
+    for (const candidate of candidates) {
+        addSkills(candidate);
+        htmlToCompanie += `
+      <div class="boxCompanieAndCandidate">
+         <p>candidato ${candidates.indexOf(candidate) + 1}</p>
+         <p>descrição: ${candidate.descripition}</p>
+         <p>formação: ${candidate.academicEducation}</p>
+         <p>skills: ${candidate.skills}</p>
+      </div>
+      `;
+    }
+}
+function addSkills(candidate) {
     for (const skill of candidate.skills) {
         const skillTrim = skill.trim().toUpperCase();
         if (allSkills.hasOwnProperty(skillTrim)) {
@@ -47,52 +71,47 @@ for (const candidate of candidates) {
         else {
             allSkills[skillTrim] = 1;
         }
+        ;
     }
-    htmlToCompanie += `
-   <div class="boxCompanieAndCandidate">
-      <p>candidato ${candidates.indexOf(candidate) + 1}</p>
-      <p>descrição: ${candidate.descripition}</p>
-      <p>formação: ${candidate.academicEducation}</p>
-      <p>skills: ${candidate.skills}</p>
-   </div>
-   `;
-}
-localStorage.setItem("allSkills", JSON.stringify(allSkills));
-function showOptionsSignUp() {
-    buttonSignUp === null || buttonSignUp === void 0 ? void 0 : buttonSignUp.classList.toggle("buttonActionClicked");
-    signUp === null || signUp === void 0 ? void 0 : signUp.classList.toggle("hide");
+    localStorage.setItem("allSkills", JSON.stringify(allSkills));
 }
 function showFormCandidate() {
+    //tentar reaproveitar os ifs
     if (!divFormCompanie.classList.contains("hide")) {
         divFormCompanie.classList.add("hide");
     }
+    ;
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
     }
+    ;
     if (!divToCompanie.classList.contains("hide")) {
         divToCompanie.classList.add("hide");
         divGraphic.classList.add("hide");
     }
+    ;
     divFormCandidate.classList.remove("hide");
 }
 function showFormCompanie() {
+    //tentar reaproveitar os ifs
     if (!divFormCandidate.classList.contains("hide")) {
         divFormCandidate.classList.add("hide");
     }
+    ;
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
     }
+    ;
     if (!divToCompanie.classList.contains("hide")) {
         divToCompanie.classList.add("hide");
         divGraphic.classList.add("hide");
     }
+    ;
     divFormCompanie.classList.remove("hide");
-}
-function reload() {
-    window.location.reload();
 }
 formCreateCandidate.addEventListener("submit", (event) => {
     event.preventDefault();
+    //jogar os gets para fora da função
     const newCanditade = {
         name: document.getElementById("candidateName").value,
         email: document.getElementById("candidateEmail").value,
@@ -104,32 +123,47 @@ formCreateCandidate.addEventListener("submit", (event) => {
         skills: document.getElementById("candidateSkills").value.split(","),
         academicEducation: document.getElementById("academicEducation").value.split(","),
     };
-    if (!nameCandidateRegex.test(newCanditade.name)) {
-        alert("Insira um nome no formato válido");
-        return;
-    }
-    if (!emailRegex.test(newCanditade.email)) {
-        alert("Insira um email no formato válido");
-        return;
-    }
-    if (!cpfRegex.test(newCanditade.cpf)) {
-        alert("Insira um CPF no formato válido");
-        return;
-    }
-    if (!ageRegex.test(newCanditade.age)) {
-        alert("Insira uma idade válida");
-        return;
-    }
-    if (!cepRegex.test(newCanditade.cep)) {
-        alert("Insira um CEP no formato válido");
-        return;
-    }
-    candidates.push(newCanditade);
-    localStorage.setItem("candidates", JSON.stringify(candidates));
-    resetFormCandidate();
-    reload();
+    addNewCandidate(newCanditade);
 });
+function validateFormCandidate(candidate) {
+    if (!nameCandidateRegex.test(candidate.name)) {
+        alert("Insira um nome no formato válido");
+        return false;
+    }
+    ;
+    if (!emailRegex.test(candidate.email)) {
+        alert("Insira um email no formato válido");
+        return false;
+    }
+    ;
+    if (!cpfRegex.test(candidate.cpf)) {
+        alert("Insira um CPF no formato válido");
+        return false;
+    }
+    ;
+    if (!ageRegex.test(candidate.age)) {
+        alert("Insira uma idade válida");
+        return false;
+    }
+    ;
+    if (!cepRegex.test(candidate.cep)) {
+        alert("Insira um CEP no formato válido");
+        return false;
+    }
+    ;
+    return true;
+}
+function addNewCandidate(candidate) {
+    if (validateFormCandidate(candidate)) {
+        candidates.push(candidate);
+        localStorage.setItem("candidates", JSON.stringify(candidates));
+        resetFormCandidate();
+        reload();
+    }
+    ;
+}
 function resetFormCandidate() {
+    //usar o gets que foram para fora
     document.getElementById("candidateName").value = "";
     document.getElementById("candidateEmail").value = "";
     document.getElementById("candidateCpf").value = "";
@@ -142,6 +176,7 @@ function resetFormCandidate() {
 }
 formCreateCompanie.addEventListener("submit", (event) => {
     event.preventDefault();
+    //jogar os gets para fora da função
     const newCompanie = {
         name: document.getElementById("companieName").value,
         email: document.getElementById("companieEmail").value,
@@ -152,31 +187,44 @@ formCreateCompanie.addEventListener("submit", (event) => {
         descripition: document.getElementById("companieDescripition").value,
         jobVacancies: [
             { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Java", "Javascript", "Sql"] },
-            { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Pythion", "Javascript", "React"] }
+            { title: "(nome da vaga)", description: "descrição da vaga", skills: ["Python", "Javascript", "React"] }
         ],
     };
-    if (!nameCompanieRegex.test(newCompanie.name)) {
-        alert("Insira um nome no formato válido");
-        return;
-    }
-    if (!emailRegex.test(newCompanie.email)) {
-        alert("Insira um email no formato válido");
-        return;
-    }
-    if (!cnpjRegex.test(newCompanie.cnpj)) {
-        alert("Insira um CNPJ no formato válido");
-        return;
-    }
-    if (!cepRegex.test(newCompanie.cep)) {
-        alert("Insira um CEP no formato válido");
-        return;
-    }
-    companies.push(newCompanie);
-    localStorage.setItem("companies", JSON.stringify(companies));
-    resetFormCompanie();
-    reload();
+    addNewCompanie(newCompanie);
 });
+function validateFormCompanie(companie) {
+    if (!nameCompanieRegex.test(companie.name)) {
+        alert("Insira um nome no formato válido");
+        return false;
+    }
+    ;
+    if (!emailRegex.test(companie.email)) {
+        alert("Insira um email no formato válido");
+        return false;
+    }
+    ;
+    if (!cnpjRegex.test(companie.cnpj)) {
+        alert("Insira um CNPJ no formato válido");
+        return false;
+    }
+    ;
+    if (!cepRegex.test(companie.cep)) {
+        alert("Insira um CEP no formato válido");
+        return false;
+    }
+    ;
+    return true;
+}
+function addNewCompanie(companie) {
+    if (validateFormCompanie(companie)) {
+        companies.push(companie);
+        localStorage.setItem("companies", JSON.stringify(companies));
+        resetFormCompanie();
+        reload();
+    }
+}
 function resetFormCompanie() {
+    //usar o gets que foram para fora
     document.getElementById("companieName").value = "";
     document.getElementById("companieEmail").value = "";
     document.getElementById("companieCnpj").value = "";
@@ -187,6 +235,7 @@ function resetFormCompanie() {
 }
 let clickedShowToCandidate = false;
 function showToCandidate() {
+    //tentar reaproveitar os ifs
     if (!divToCompanie.classList.contains("hide")) {
         divGraphic.classList.add("hide");
         divToCompanie.classList.add("hide");
@@ -204,7 +253,15 @@ function showToCandidate() {
     divToCandidate.classList.remove("hide");
 }
 function showJobs(id) {
+    const hmtlVacancies = createJobVacancies(id);
     const searchCompanie = document.getElementById(id);
+    searchCompanie.innerHTML = `
+   <div class="vacancies">
+      ${hmtlVacancies}
+   </div>
+   `;
+}
+function createJobVacancies(id) {
     const idNumber = parseInt(id);
     const vacancies = companies[idNumber].jobVacancies;
     let hmtlVacancies = ``;
@@ -223,16 +280,15 @@ function showJobs(id) {
          `;
         }
     }
-    searchCompanie.innerHTML = `
-   <div class="vacancies">
-      ${companies[idNumber].jobVacancies ?
-        hmtlVacancies :
-        `<h2>Não há vagas!</h2>`}
-   </div>
-   `;
+    else {
+        hmtlVacancies += `<h2>Não há vagas!</h2>`;
+    }
+    ;
+    return hmtlVacancies;
 }
 let clickedShowToCompanie = false;
 function showToCompanie() {
+    //tentar reaproveitar os ifs
     if (!divToCandidate.classList.contains("hide")) {
         divToCandidate.classList.add("hide");
     }
@@ -275,6 +331,9 @@ function createGraphic() {
             }
         }
     };
+    showGrafig(graphicObjet);
+}
+function showGrafig(graphicObjet) {
     const graphicObjetJson = JSON.stringify(graphicObjet);
     scriptGrafic.innerHTML = `
    const ctx = document.getElementById('myChart');

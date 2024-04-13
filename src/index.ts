@@ -93,20 +93,8 @@ function creatListCompanies() : void {
 function creatListCandidates() : void {
 
    for (const candidate of candidates) {
-      //criar função para pegar skills
-      for(const skill of candidate.skills){
+      addSkills(candidate)
 
-         const skillTrim = skill.trim().toUpperCase();
-
-         if (allSkills.hasOwnProperty(skillTrim)){
-            let count = allSkills[skillTrim]
-            count? count++ : 0
-            allSkills[skillTrim] = count? count: 0
-         } else {
-            allSkills[skillTrim] = 1
-         };
-      }
-   
       htmlToCompanie += `
       <div class="boxCompanieAndCandidate">
          <p>candidato ${candidates.indexOf(candidate) + 1}</p>
@@ -115,9 +103,24 @@ function creatListCandidates() : void {
          <p>skills: ${candidate.skills}</p>
       </div>
       `;
+   } 
+}
+
+function addSkills(candidate: candidate): void {
+
+   for(const skill of candidate.skills){
+
+      const skillTrim = skill.trim().toUpperCase();
+
+      if (allSkills.hasOwnProperty(skillTrim)){
+         let count = allSkills[skillTrim]
+         count? count++ : 0
+         allSkills[skillTrim] = count? count: 0
+      } else {
+         allSkills[skillTrim] = 1
+      };
    }
 
-   //jogar para dentro da função de pegar skills
    localStorage.setItem("allSkills", JSON.stringify(allSkills));
 }
 
@@ -328,11 +331,23 @@ function showToCandidate(): void {
 }
 
 function showJobs(id: string) : void {
-   //criar funçaõ para criar as vagas
-   const idNumber = parseInt(id);
-   const vacancies = companies[idNumber].jobVacancies;
 
-   let hmtlVacancies = ``;
+   const hmtlVacancies = createJobVacancies(id);
+   const searchCompanie = (document.getElementById(id) as HTMLBodyElement);
+
+   searchCompanie.innerHTML = `
+   <div class="vacancies">
+      ${hmtlVacancies}
+   </div>
+   `;
+}
+
+function createJobVacancies(id: string) : string {
+
+   const idNumber: number = parseInt(id);
+   const vacancies: jobVacancies[] | undefined = companies[idNumber].jobVacancies;
+
+   let hmtlVacancies: string = ``;
 
    if (vacancies) {
       for(let jobVacancie of vacancies) {
@@ -348,20 +363,13 @@ function showJobs(id: string) : void {
          </div>
          `
       } 
-   }
+   } else {
+      hmtlVacancies += `<h2>Não há vagas!</h2>`
+   };
 
-   //criar função que adiciona vagas na compania
-   const searchCompanie = (document.getElementById(id) as HTMLBodyElement);
-
-   searchCompanie.innerHTML = `
-   <div class="vacancies">
-      ${companies[idNumber].jobVacancies ?
-      hmtlVacancies :
-      `<h2>Não há vagas!</h2>`
-      }
-   </div>
-   `;
+   return hmtlVacancies;
 }
+
 
 let clickedShowToCompanie = false;
 function showToCompanie(): void {
