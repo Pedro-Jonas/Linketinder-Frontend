@@ -157,7 +157,7 @@ button {
     padding-left: 10px;
 }
 
-.showToCompanie {
+.showToCompany {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -169,7 +169,7 @@ button {
     padding-left: 10px;
 }
 
-.boxCompanieAndCandidate {
+.boxCompanyAndCandidate {
     display: flex;
     flex-direction: column;
     gap: 5px;
