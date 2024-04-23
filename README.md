@@ -19,6 +19,10 @@ tsc -w
 3. Typecript
 4. Chart.js
 
+## Melhorias de Refatorção
+1. Separação de Responsabilidades
+2. Aplicação de princípios SOLID
+
 ## Link para o backEnd
 https://github.com/Pedro-Jonas/Linketinder
 
